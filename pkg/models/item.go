@@ -1,4 +1,4 @@
-package model
+package models
 
 type Item struct {
 	ID          int64  `json:"-"`

@@ -1,4 +1,4 @@
-package model
+package models
 
 type Delivery struct {
 	Name    string `json:"name"`

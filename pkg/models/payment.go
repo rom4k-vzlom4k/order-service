@@ -1,4 +1,4 @@
-package model
+package models
 
 type Payment struct {
 	Transaction  string `json:"transaction"`
