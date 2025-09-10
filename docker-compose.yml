@@ -18,9 +18,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=order_admin
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=order_service
+      .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./db/migrations:/docker-entrypoint-initdb.d
