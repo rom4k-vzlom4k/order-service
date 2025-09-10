@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск заказа</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #orderIdInput {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #searchButton {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #searchButton:hover {
+            background-color: #0056b3;
+        }
+        #loading {
+            text-align: center;
+            display: none;
+            margin-bottom: 20px;
+        }
+        #result {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Поиск заказа по ID</h1>
+        <div class="input-group">
+            <input type="text" id="orderIdInput" placeholder="Введите ID заказа">
+            <button id="searchButton">Найти</button>
+        </div>
+        <div id="loading">Загрузка...</div>
+        <pre id="result"></pre>
+    </div>
+
+    <script>
+        document.getElementById('searchButton').addEventListener('click', async () => {
+            const orderId = document.getElementById('orderIdInput').value;
+            const resultDiv = document.getElementById('result');
+            const loadingDiv = document.getElementById('loading');
+            
+            resultDiv.textContent = '';
+            loadingDiv.style.display = 'block';
+
+            if (!orderId) {
+                loadingDiv.style.display = 'none';
+                resultDiv.textContent = 'Введите ID заказа.';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/order/${orderId}`);
+                loadingDiv.style.display = 'none';
+
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    resultDiv.textContent = `Ошибка: Заказ с ID "${orderId}" не найден.`;
+                }
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                resultDiv.textContent = `Произошла ошибка при получении данных: ${error.message}`;
+                console.error('Error fetching order:', error);
+            }
+        });
+    </script>
+</body>
+</html>
